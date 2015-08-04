@@ -1,34 +1,7 @@
-var fs = require('fs')
-var SAMPLE_RATE = 44100
-var VOLUME = 30
-
+var fs = require('fs');
 var header = require("waveheader");
-// var tone = require("tonegenerator");
-
-// var tone1 = tone(440, 2);
-// var tone2 = tone(554.37, 2);
-// var tone3 = tone(659.26, 2);
-
-// // "playing" one tone at the time
-// // note that at this time, our sound is just an array 
-// // of gain values. By appending the raw PCM data for one after another,
-// // we can play them in a sequence
-// var res = [].concat(tone1);
-// res = res.concat(tone2);
-// res = res.concat(tone3);
-
-// // By adding values of the tones for each sample,
-// // we play them simultaneously, as a chord
-// for(var i = 0; i < tone1.length; i++) {
-//   res.push(tone1[i] + tone2[i] + tone3[i]);
-// }
-
-// // write to file (note conversion to buffer!)
-// var writer = new fs.createWriteStream("A-major.wav");
-// writer.write(header( 44100 * 8 )); // 44100 Hz * 8 seconds
-// writer.write(new Buffer(res));
-// writer.end();
-
+var SAMPLE_RATE = 44100;
+var VOLUME = 30;
 var FREQUENCIES = {
     cis1 : -44, d1   : -43, dis1 : -42,  e1   : -41, f1   : -40,
     fis1 : -39, g1   : -38, gis1 : -37,  a1   : -36, ais1 : -35,
@@ -104,29 +77,22 @@ function frequencyOf(step) {
   return 440.0 * (Math.pow(2, power))
 }
 
-
 function compose(score) {
   var scoreLength = 0;
   var wavData = [];
   for (var i = 0; i <score.length; i++) {
     var freq = score[i].freq;
     var duration = score[i].duration;
-    console.log(freq)
-    console.log(duration)
     wavData =  wavData.concat(tone(freq, duration));
     scoreLength = scoreLength + duration;
   };
-
-  console.log(scoreLength);
-
   var writer = new fs.createWriteStream("my_score.wav");
   writer.write(header( SAMPLE_RATE * scoreLength )); // 44100 Hz * 8 seconds
   writer.write(new Buffer(wavData));
   writer.end();
 }
 
-
-
+// write your scores here
 var score = [
               note('e5', 0.5), note('e5', 0.5), note('n', 0.5), note('e5', 0.5), note('n', 0.5), 
               note('c5', 0.5), note('e5', 0.5), note('n', 0.5), note('g5', 0.5), note('n', 0.5), 
