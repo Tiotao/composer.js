@@ -68,7 +68,6 @@ function tone(freq, lengthInSecs) {
       ret = ret.concat(generateCycle(cycle, volume));
     }
   }
-
   return ret;
 }
 
